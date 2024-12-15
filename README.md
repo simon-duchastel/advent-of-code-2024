@@ -1,2 +1,3 @@
-# advent-of-code-2024
-My 2024 Advent of Code solutions
+# Advent of Code 2023
+
+Solutions for the 2023 Advent of Code, written in Javascript.
