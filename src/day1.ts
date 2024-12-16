@@ -1,19 +1,18 @@
 import { parse } from 'path';
 import { readInputForDay } from './common/file.js'
 
-async function part1(sample: Boolean = false) {
+async function part1(sample: Boolean = false): Promise<number> {
     const input = await readInputForDay(1, sample);
-    const [leftList, rightList] = parseLists(input);
+    var [leftList, rightList] = parseLists(input);
 
-    // sort the lists and sum each summed item
-    leftList.sort();
-    rightList.sort();
-
+    // sort the lists and sum the difference between each item
+    leftList = leftList.sort();
+    rightList = rightList.sort();
     const length = Math.min(leftList.length, rightList.length);
-    const distances = Array.from({ length }, (_, i) => leftList[i] + rightList[i]);
+    const distances = Array.from({ length }, (_, i) => Math.abs(leftList[i] - rightList[i]));
     const totalDistance = distances.reduce((acc, curr) => acc + curr, 0);
 
-    console.log(totalDistance);
+    return totalDistance;
 }
 
 function part2() {
@@ -34,4 +33,10 @@ function parseLists(input: string): [number[], number[]] {
     return [leftList, rightList ];
 };
 
-part1(true);
+console.log("Part 1");
+const partOneResult = await part1();
+console.log(partOneResult);
+
+// console.log("Part 2");
+// const partTwoResult = part2(true);
+// console.log(partTwoResult)
