@@ -35,6 +35,7 @@ function isReportSafe(
     useProblemDampener: Boolean, 
     hasEncounteredIssue = false, // tracks whether we've encountered an issue the problem dampener can fix
 ): boolean {
+    if (useProblemDampener) { console.log("trying " + report); }
     // if the first is bigger than the second, the whole list should decrease
     var shouldDecrease = report[0] > report[1];
     for (var i = 1; i < report.length; i++) {
@@ -50,15 +51,14 @@ function isReportSafe(
             }
 
             // attempt to fix the issue
-            if (!hasEncounteredIssue) {
-                const removeAfter = report.filter((_, index) => index !== i);
-                const tryRemovingAfter = isReportSafe(removeAfter, useProblemDampener, true);
-                const removeBefore = report.filter((_, index) => index !== i - 1);
-                const tryRemovingBefore = isReportSafe(removeBefore, useProblemDampener, true);
-                return tryRemovingBefore || tryRemovingAfter;
-            } else {
-                return false;
+            for (var j = i - 2; j < i + 2; j++) {
+                const withRemoval = report.filter((_, index) => index !== j);
+                if (isReportSafe(withRemoval, useProblemDampener, true)) {
+                    return true;
+                }
             }
+
+            return false; // if we were still unable to fix it with a lookback of 2 return false
         }
         if (!shouldDecrease && report[i-1] >= report[i]) {
             // if the later one is bigger but we should decrease, it's unsafe
@@ -70,13 +70,16 @@ function isReportSafe(
             if (hasEncounteredIssue) {
                 return false;
             }
-                
+
             // attempt to fix the issue
-            const removeAfter = report.filter((_, index) => index !== i);
-            const tryRemovingAfter = isReportSafe(removeAfter, useProblemDampener, true);
-            const removeBefore = report.filter((_, index) => index !== i - 1);
-            const tryRemovingBefore = isReportSafe(removeBefore, useProblemDampener, true);
-            return tryRemovingBefore || tryRemovingAfter;
+            for (var j = i - 2; j < i + 2; j++) {
+                const withRemoval = report.filter((_, index) => index !== j);
+                if (isReportSafe(withRemoval, useProblemDampener, true)) {
+                    return true;
+                }
+            }
+
+            return false; // if we were still unable to fix it with a lookback of 2 return false
         }
 
         if (Math.abs(report[i] - report[i-1]) > 3) {
@@ -91,11 +94,14 @@ function isReportSafe(
             }
 
             // attempt to fix the issue
-            const removeAfter = report.filter((_, index) => index !== i);
-            const tryRemovingAfter = isReportSafe(removeAfter, useProblemDampener, true);
-            const removeBefore = report.filter((_, index) => index !== i - 1);
-            const tryRemovingBefore = isReportSafe(removeBefore, useProblemDampener, true);
-            return tryRemovingBefore || tryRemovingAfter;
+            for (var j = i - 2; j < i + 2; j++) {
+                const withRemoval = report.filter((_, index) => index !== j);
+                if (isReportSafe(withRemoval, useProblemDampener, true)) {
+                    return true;
+                }
+            }
+
+            return false; // if we were still unable to fix it with a lookback of 2 return false
         }
     }
 
