@@ -1,0 +1,4 @@
+# Ignore compilation files (like dist, .js, and node_modules)
+*.js
+node_modules/*
+dist/*
