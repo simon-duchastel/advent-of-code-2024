@@ -1,4 +1,3 @@
-import { parse } from 'path';
 import { readInputForDay } from './common/file.js'
 
 async function part1(useSampleData: Boolean = false): Promise<number> {
@@ -53,4 +52,4 @@ console.log(partOneResult);
 
 console.log("Part 2");
 const partTwoResult = await part2();
-console.log(partTwoResult)
+console.log(partTwoResult);
