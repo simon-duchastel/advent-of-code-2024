@@ -1,8 +1,8 @@
 import { readFile } from 'fs/promises';
 
-export async function readInputForDay(day: number, sample: Boolean = false) {
+export async function readInputForDay(day: number, useSampleData: Boolean = false) {
     var filePath = `inputs/day${day}`;
-    if (sample) {
+    if (useSampleData) {
         filePath += "-sample";
     }
     filePath += ".txt";
