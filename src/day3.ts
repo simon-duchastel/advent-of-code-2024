@@ -72,5 +72,5 @@ const partOneResult = await part1();
 console.log(partOneResult);
 
 console.log("Part 2");
-const partTwoResult = await part2(true);
+const partTwoResult = await part2();
 console.log(partTwoResult);
