@@ -1,4 +1,6 @@
+import { Dir } from 'fs';
 import { readInputForDay } from './common/file.js'
+import { dir } from 'console';
 
 async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
@@ -18,14 +20,32 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
     const wordSearch = parseWordSearch(input);
     const allMs = findAllChars(wordSearch, 'M');
 
-    var numMas = 0;
+    var masLocations: [Position, Direction][] = [];
     for (const m of allMs) {
         // only look for words 'MAS' in the diaganol directions
-        numWordsAtPosition(wordSearch, m, 'MAS', false);
+        for (const masFound of numWordsAtPosition(wordSearch, m, 'MAS', false)) {
+            masLocations.push([m, masFound]);
+        }
     }
 
     // find all the A's that are a part of 2 different MAS words - these are the 'X'
     // formation 'MAS's
+    const allAs = findAllChars(wordSearch, 'A');
+    var numMas = 0;
+    for (const a of allAs) {
+        var numWordsMatched = 0;
+        for (const mas of masLocations) {
+            const aLocation = applyDirection(mas[0], mas[1]);
+            if (aLocation[0] === a[0] && aLocation[1] === a[1]) {
+                numWordsMatched++;
+            }
+            if (numWordsMatched >= 2) {
+                // if the 'A' is a part of 2 MAS words, then it's in an 'X'
+                numMas++;
+                break;
+            }
+        }
+    }
 
     return numMas;
 }
@@ -99,10 +119,15 @@ function numWordsAtPosition(
     return directionsToReturn;
 }
 
+// Add the [direction] vector to the [position] vector to get a new Position
+function applyDirection(position: Position, direction: Direction): Position {
+    return [position[0] + direction[0], position[1] + direction[1]];
+}
+
 console.log("Part 1");
 const partOneResult = await part1();
 console.log(partOneResult);
 
 console.log("Part 2");
-const partTwoResult = await part2(true);
+const partTwoResult = await part2();
 console.log(partTwoResult);
