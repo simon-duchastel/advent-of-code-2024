@@ -7,7 +7,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
 
     var numXmas = 0;
     for (const x of allXs) {
-        numXmas += numWordsAtPosition(wordSearch, x, 'XMAS');
+        numXmas += numWordsAtPosition(wordSearch, x, 'XMAS').length;
     }
 
     return numXmas;
@@ -20,14 +20,19 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
 
     var numMas = 0;
     for (const m of allMs) {
-        numMas += numWordsAtPosition(wordSearch, m, 'MAS', true);
+        // only look for words 'MAS' in the diaganol directions
+        numWordsAtPosition(wordSearch, m, 'MAS', false);
     }
+
+    // find all the A's that are a part of 2 different MAS words - these are the 'X'
+    // formation 'MAS's
 
     return numMas;
 }
 
 type WordSearch = string[][];
 type Position = [number, number]; // row first, then column
+type Direction = [number, number]; // same as Position, but represents a direction
 
 function parseWordSearch(input: string): WordSearch {
     return input.split('\n').map(line => line.split(''));
@@ -46,27 +51,27 @@ function findAllChars(wordSearch: WordSearch, char: string): Position[] {
     return positions;
 }
 
-// Returns the number of words [word] in any direction
-// at the given position.
-// If [inX] is true, then this function returns 1
-// if the words appear in an 'X' formation and 0 otherwise.
+// Returns the directions of all words [word] 
+// starting from the given [position]. Returns
+// an empty list if no words are found
+// in any direction.
 function numWordsAtPosition(
     wordSearch: WordSearch, 
     position: Position, 
     word: string,
-    inX: boolean = false,
-): number {
-    var numWords = 0;
-    var directions: [number, number][] = [
+    includeNonDiaganols: boolean = true
+): Direction[] {
+    var directionsToReturn: Direction[] = [];
+    var directionsToCheck: Direction[] = [
         [-1, -1], [-1, 1], [1, -1], [1, 1] // up-left, up-right, down-left, down-right
     ];
-    if (!inX) {
+    if (includeNonDiaganols) {
         // if we're looking for words in an 'X' formation, we only care about
         // the diaganols. Re-add the horizontal/verticals if not.
-        directions.push([-1, 0], [1, 0], [0, -1], [0, 1]) // up, down, left, right
+        directionsToCheck.push([-1, 0], [1, 0], [0, -1], [0, 1]) // up, down, left, right
     }
 
-    for (let [dx, dy] of directions) {
+    for (let [dx, dy] of directionsToCheck) {
         let valid = true;
         for (let i = 0; i < word.length; i++) {
             const newRow = position[0] + (i * dx);
@@ -87,21 +92,11 @@ function numWordsAtPosition(
 
         // If we haven't skipped yet, the entire word is found in this direction
         if (valid) {
-            numWords++;
+            directionsToReturn.push([dx, dy]);
         }
     }
 
-    if (inX) {
-        if (numWords >= 2) {
-            // if we match any 2 diaganols, it's in an 'X' formation
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    
-    // if we're not looking for 'X' formations, just return the words found
-    return numWords;
+    return directionsToReturn;
 }
 
 console.log("Part 1");
