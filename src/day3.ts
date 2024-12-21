@@ -21,19 +21,19 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
 type MulInstruction = [number, number];
 
 function parseMulInstructions(input: string): MulInstruction[] {
-    const regex = "/mul\([0-9]+,[0-9]+\)/g";
+    const regex = /mul\([0-9]+,[0-9]+\)/g;
     var mulInstructions: MulInstruction[] = [];
     const matches = input.match(regex);
     if (!matches || matches.length === 0) { // if we have no matches return empty list
         return [];
     }
+
     for (const match of matches) {
-        const mulRegex = "/([0-9]+),([0-9)+/g";
-        const mulMatches = match[0].match(mulRegex);
-        if (!mulMatches || mulMatches.length !== 3) {
+        const mulRegex = /mul\(([0-9]+),([0-9]+)\)/;
+        const mulMatches = match.match(mulRegex);
+        if (!mulMatches || mulMatches.length < 3) {
             // if we don't find the numbers we expect, skip this match
-            // length is 3 because [0] is the entire match, [1] and [2] are
-            // the groups
+            // first index is the total match, next two are the numbers (groups)
             continue;
         }
 
@@ -46,7 +46,7 @@ function parseMulInstructions(input: string): MulInstruction[] {
 }
 
 console.log("Part 1");
-const partOneResult = await part1(true);
+const partOneResult = await part1();
 console.log(partOneResult);
 
 // console.log("Part 2");
