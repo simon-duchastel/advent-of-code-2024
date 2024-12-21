@@ -2,6 +2,7 @@ import { readInputForDay } from './common/file.js'
 
 async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
+    const wordSearch = parseWordSearch(input);
 
     return -1;
 }
@@ -11,6 +12,13 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
     
     return -1;
 }
+
+type WordSearch = string[][]
+
+function parseWordSearch(input: string): WordSearch {
+    return input.split('\n').map(line => line.split(''));
+}
+
 
 console.log("Part 1");
 const partOneResult = await part1(true);
