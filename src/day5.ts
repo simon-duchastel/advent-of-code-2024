@@ -3,9 +3,35 @@ import { readInputForDay } from './common/file.js';
 async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(5, useSampleData);
     const instructions = parseInstructions(input);
-    console.log(instructions);
+    
+    var validUpdates = [];
+    for (const update of instructions.pageUpdates) {
+        var pagesSeen: number[] = [];
+        var updateIsValid = true;
+        for (const page of update) {
+            const rulePages = instructions.rules.get(page);
+            if (rulePages) {
+                for (const rulePage of rulePages) {
+                    if (pagesSeen.includes(rulePage)) {
+                        updateIsValid = false;
+                        break;
+                    }
+                }
+            }
+            pagesSeen.push(page);
+        }
 
-    return -1;
+        if (updateIsValid) {
+            validUpdates.push(update);
+        }
+    }
+
+    var middleValueSum = 0;
+    validUpdates
+        .map((validUpdate) => getMiddleValue(validUpdate))
+        .forEach((middleValue) => { middleValueSum += middleValue; });
+
+    return middleValueSum;
 }
 
 async function part2(useSampleData: Boolean = false): Promise<number> {
@@ -16,17 +42,28 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
 }
 
 type Instructions = {
-    rules: PageOrderingRule[],
+    rules: PageOrderingRules,
     pageUpdates: number[][],
 }
-type PageOrderingRule = [number, number]
+
+// Each rule is a map where:
+// - they key is a number
+// - the value is a list of numbers, where the keys in the
+//   updates must be printed before each in the values
+type PageOrderingRules = Map<number, number[]>
 
 function parseInstructions(input: string): Instructions {
     const [ruleSection, updateSection] = input.split('\n\n');
 
-    const rules: PageOrderingRule[] = ruleSection.split('\n').map((rule) => {
-        const [first, second] = rule.split('|');
-        return [parseInt(first), parseInt(second)];
+    var rules: Map<number, number[]> = new Map();
+    ruleSection.split('\n').forEach((rule) => {
+        const [first, second] = rule.split('|').map((num) => parseInt(num));
+        var ruleToAdd = rules.get(first);
+        if (!ruleToAdd) {
+            ruleToAdd = []
+        }
+        ruleToAdd.push(second);
+        rules.set(first, ruleToAdd);
     });
     const updates = updateSection.split('\n').map((update) => {
         return update.split(',').map((num) => parseInt(num));
@@ -38,8 +75,16 @@ function parseInstructions(input: string): Instructions {
     }
 }
 
+// Returns the value in the middle of the array, rounded down
+// in the case of even-lengthed arrays. [array] must be
+// length > 0.
+function getMiddleValue(array: number[]): number {
+    const index = Math.floor(array.length / 2);
+    return array[index];
+}
+
 console.log("Part 1");
-const partOneResult = await part1(true);
+const partOneResult = await part1();
 console.log(partOneResult);
 
 // console.log("Part 2");
