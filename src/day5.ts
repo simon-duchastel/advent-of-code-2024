@@ -4,30 +4,10 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(5, useSampleData);
     const instructions = parseInstructions(input);
     
-    var validUpdates = [];
-    for (const update of instructions.pageUpdates) {
-        var pagesSeen: number[] = [];
-        var updateIsValid = true;
-        for (const page of update) {
-            const rulePages = instructions.rules.get(page);
-            if (rulePages) {
-                for (const rulePage of rulePages) {
-                    if (pagesSeen.includes(rulePage)) {
-                        updateIsValid = false;
-                        break;
-                    }
-                }
-            }
-            pagesSeen.push(page);
-        }
-
-        if (updateIsValid) {
-            validUpdates.push(update);
-        }
-    }
+    const sortedUpdates = sortUpdates(instructions);
 
     var middleValueSum = 0;
-    validUpdates
+    sortedUpdates.validUpdates
         .map((validUpdate) => getMiddleValue(validUpdate))
         .forEach((middleValue) => { middleValueSum += middleValue; });
 
@@ -44,6 +24,11 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
 type Instructions = {
     rules: PageOrderingRules,
     pageUpdates: number[][],
+}
+
+type SortedUpdates = {
+    validUpdates: number[][],
+    invalidUpdates: number[][],
 }
 
 // Each rule is a map where:
@@ -72,6 +57,38 @@ function parseInstructions(input: string): Instructions {
     return {
         rules: rules,
         pageUpdates: updates,
+    }
+}
+
+function sortUpdates(instructions: Instructions): SortedUpdates {
+    var validUpdates = [];
+    var invalidUpdates = [];
+    for (const update of instructions.pageUpdates) {
+        var pagesSeen: number[] = [];
+        var updateIsValid = true;
+        for (const page of update) {
+            const rulePages = instructions.rules.get(page);
+            if (rulePages) {
+                for (const rulePage of rulePages) {
+                    if (pagesSeen.includes(rulePage)) {
+                        updateIsValid = false;
+                        break;
+                    }
+                }
+            }
+            pagesSeen.push(page);
+        }
+
+        if (updateIsValid) {
+            validUpdates.push(update);
+        } else {
+            invalidUpdates.push(update);
+        }
+    }
+
+    return {
+        validUpdates: validUpdates,
+        invalidUpdates: invalidUpdates,
     }
 }
 
