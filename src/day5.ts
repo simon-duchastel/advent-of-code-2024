@@ -21,7 +21,7 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
     const sortedUpdates = sortUpdates(instructions);
     var middleValueSum = 0;
     sortedUpdates.invalidUpdates
-        .map((invalidUpdate) => fixUpdate(invalidUpdate))
+        .map((invalidUpdate) => fixUpdate(invalidUpdate, instructions))
         .map((validUpdate) => getMiddleValue(validUpdate))
         .forEach((middleValue) => { middleValueSum += middleValue; });
 
@@ -102,10 +102,14 @@ function isUpdateValid(update: number[], rules: PageOrderingRules): boolean {
     return updateIsValid;
 }
 
-function fixUpdate(pageUpdate: number[]): number[] {
-    
+function fixUpdate(pageUpdate: number[], instructions: Instructions): number[] {
+    var isNowValid = false;
+    var newUpate = pageUpdate;
+    while (!isNowValid) {
+        
+    }
 
-    return [];
+    return newUpate;
 }
 
 // Returns the value in the middle of the array, rounded down
