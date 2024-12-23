@@ -17,15 +17,27 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
 }
 
 async function part2(useSampleData: Boolean = false): Promise<number> {
-    const input = await readInputForDay(5, useSampleData);
+    const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
-    for (const col of map) {
-        for (const row of col) {
 
+    var viableObstacles: Position[] = [];
+    var progress = 1;
+    const max = map.length*map[0].length;
+    for (var row = 0; row < map.length; row++) {
+        for (var col = 0; col < map[row].length; col++) {
+            console.log(progress + "/" + max);
+            if (map[row][col] === '.') {
+                var newMap = map.map(row => row.slice()); // create deep-copy
+                newMap[row][col] = '#';
+                if (predictGuardRoute(newMap) === undefined) {
+                    viableObstacles.push([row, col]);
+                }
+            }
+            progress++;
         }
     }
 
-    return -1;
+    return viableObstacles.length;
 }
 
 // The map, where
@@ -110,6 +122,6 @@ console.log("Part 1");
 const partOneResult = await part1();
 console.log(partOneResult);
 
-// console.log("Part 2");
-// const partTwoResult = await part2();
-// console.log(partTwoResult);
+console.log("Part 2");
+const partTwoResult = await part2(false);
+console.log(partTwoResult);
