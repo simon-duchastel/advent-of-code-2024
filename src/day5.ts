@@ -71,7 +71,8 @@ function sortUpdates(instructions: Instructions): SortedUpdates {
     var validUpdates = [];
     var invalidUpdates = [];
     for (const update of instructions.pageUpdates) {
-        if (isUpdateValid(update, instructions.rules)) {
+        const [isValid, _] = isUpdateValid(update, instructions.rules);
+        if (isValid) {
             validUpdates.push(update);
         } else {
             invalidUpdates.push(update);
@@ -84,30 +85,42 @@ function sortUpdates(instructions: Instructions): SortedUpdates {
     }
 }
 
-function isUpdateValid(update: number[], rules: PageOrderingRules): boolean {
+// Returns false and the first index where the update is invalid if it's invalid,
+// true otherwise.
+function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, number] {
     var pagesSeen: number[] = [];
-    var updateIsValid = true;
-    for (const page of update) {
+    for (var i = 0; i < update.length; i++) {
+        const page = update[i];
         const rulePages = rules.get(page);
         if (rulePages) {
             for (const rulePage of rulePages) {
                 if (pagesSeen.includes(rulePage)) {
-                    updateIsValid = false;
-                    break;
+                    return [false, i];
                 }
             }
         }
         pagesSeen.push(page);
     }
-    return updateIsValid;
+    return [true, -1];
 }
 
-function fixUpdate(pageUpdate: number[], instructions: Instructions): number[] {
+function fixUpdate(update: number[], instructions: Instructions): number[] {
     var isNowValid = false;
-    var newUpate = pageUpdate;
-    while (!isNowValid) {
-        
-    }
+    var newUpate = update;
+    // while (!isNowValid) {
+    //     for (const page of newUpate) {
+    //         const rulePages = rules.get(page);
+    //         if (rulePages) {
+    //             for (const rulePage of rulePages) {
+    //                 if (pagesSeen.includes(rulePage)) {
+    //                     updateIsValid = false;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         pagesSeen.push(page);
+    //     }
+    // }
 
     return newUpate;
 }
