@@ -4,6 +4,9 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
     const route = predictGuardRoute(map);
+    if (route === undefined) {
+        return -1; // guard is stuck in a loop - error condition
+    }
 
     // sets don't handle reference types correctly, so use JSON.stringify as
     // a hack to get string representations, which are handled
@@ -15,6 +18,12 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
 
 async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(5, useSampleData);
+    const map = parseMap(input);
+    for (const col of map) {
+        for (const row of col) {
+
+        }
+    }
 
     return -1;
 }
@@ -32,12 +41,10 @@ function parseMap(input: string): Map {
     return input.split('\n').map((line) => line.split(''));
 }
 
-function predictGuardRoute(map: Map): Route {
-    var newMap = map; // create mutable copy
+// Return the guard's route, or undefined if it's stuck in a loop.
+function predictGuardRoute(map: Map): Route | undefined {
     const [rowBound, colBound] = [map.length, map[0].length]
     var guard: Position = findObject(['^', '>', 'v', '<'], map);
-    var route: Route = [guard]; // first position in the route is the guard
-    
     var direction = map[guard[0]][guard[1]];
     var directions: string[] = ['^', '>', 'v', '<']; // rotation order
     var deltas: { [key: string]: [number, number] } = {
@@ -47,7 +54,11 @@ function predictGuardRoute(map: Map): Route {
         '<': [0, -1],
     };
 
+
     // simulate the guard's movements
+    // track both the guard's visited routes and directions at that time
+    // in order to detect loops
+    var route: [Position, string][] = [[guard, direction]]; // first position in the route is the guard
     while (true) {
         let [row, col] = guard;
         let [dRow, dCol] = deltas[direction];
@@ -66,12 +77,21 @@ function predictGuardRoute(map: Map): Route {
             continue;
         }
 
+        // check if the guard has revisited the same position
+        // with the same direction - if so it's a loop
+        const hasVisited = route.filter(([[prevRow, prevCol], prevDir]) => 
+            row === prevRow && col === prevCol && direction === prevDir
+        ).length > 0
+        if (hasVisited) {
+            return undefined;
+        }
+
         // no obstacles, so add this position to the route
-        route.push([row, col]);
+        route.push([[row, col], direction]);
         guard = [row, col];
     }
 
-    return route;
+    return route.map(([pos, _]) => pos);
 }
 
 // Returns the first position for a given object(s), or null if not found
