@@ -71,7 +71,7 @@ function sortUpdates(instructions: Instructions): SortedUpdates {
     var validUpdates = [];
     var invalidUpdates = [];
     for (const update of instructions.pageUpdates) {
-        const [isValid, _] = isUpdateValid(update, instructions.rules);
+        const [isValid] = isUpdateValid(update, instructions.rules);
         if (isValid) {
             validUpdates.push(update);
         } else {
@@ -85,9 +85,10 @@ function sortUpdates(instructions: Instructions): SortedUpdates {
     }
 }
 
-// Returns false and the first index where the update is invalid if it's invalid,
+// Returns false, the first index where the update is invalid, and the offending rule if it's invalid,
 // true otherwise.
-function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, number] {
+// The offending rule is represented as the number that was printed before but should have been printed after.
+function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, number, number] {
     var pagesSeen: number[] = [];
     for (var i = 0; i < update.length; i++) {
         const page = update[i];
@@ -95,34 +96,27 @@ function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, nu
         if (rulePages) {
             for (const rulePage of rulePages) {
                 if (pagesSeen.includes(rulePage)) {
-                    return [false, i];
+                    return [false, i, rulePage];
                 }
             }
         }
         pagesSeen.push(page);
     }
-    return [true, -1];
+    return [true, -1, -1];
 }
 
 function fixUpdate(update: number[], instructions: Instructions): number[] {
-    var isNowValid = false;
-    var newUpate = update;
-    // while (!isNowValid) {
-    //     for (const page of newUpate) {
-    //         const rulePages = rules.get(page);
-    //         if (rulePages) {
-    //             for (const rulePage of rulePages) {
-    //                 if (pagesSeen.includes(rulePage)) {
-    //                     updateIsValid = false;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //         pagesSeen.push(page);
-    //     }
-    // }
+    var [isNowValid, index, rule] = isUpdateValid(update, instructions.rules);
+    var newUpdate = update;
+    while (!isNowValid) {
+        // swap the indices and try again
+        const ruleIndex = update.indexOf(rule);
+        [newUpdate[ruleIndex], newUpdate[index]] = [newUpdate[index], newUpdate[ruleIndex]];
 
-    return newUpate;
+        [isNowValid, index, rule] = isUpdateValid(newUpdate, instructions.rules);
+    }
+
+    return newUpdate;
 }
 
 // Returns the value in the middle of the array, rounded down
@@ -138,5 +132,5 @@ const partOneResult = await part1();
 console.log(partOneResult);
 
 console.log("Part 2");
-const partTwoResult = await part2(true);
+const partTwoResult = await part2();
 console.log(partTwoResult);
