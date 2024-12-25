@@ -5,7 +5,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     const instructions = parseInstructions(input);
 
     const sum = instructions
-        .filter((instruction) => testOperators(instruction.expected, instruction.numbers))
+        .filter((instruction) => testOperators(instruction.expected, instruction.numbers, false))
         .map((instruction) => instruction.expected)
         .reduce((sum, num) => sum + num, 0);
 
@@ -16,7 +16,13 @@ async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(7, useSampleData);
     const instructions = parseInstructions(input);
 
-    return -1;
+    // allow concatenation
+    const sum = instructions
+        .filter((instruction) => testOperators(instruction.expected, instruction.numbers, true))
+        .map((instruction) => instruction.expected)
+        .reduce((sum, num) => sum + num, 0);
+
+    return sum;
 }
 
 type Instruction = {
@@ -36,7 +42,8 @@ function parseInstructions(input: string): Instruction[] {
 
 function testOperators(
     target: number, 
-    numbers: number[], 
+    numbers: number[],
+    allowConcatenation: boolean,
     memo = new Map<string, boolean>(),
 ): boolean {
     const key = `${target}:${numbers.join(',')}`;
@@ -53,22 +60,39 @@ function testOperators(
     const remainingNumbers = [...numbers.slice(2)];
 
     // Test addition
-    if (testOperators(target, [left + right, ...remainingNumbers], memo)) {
+    const resultA = left + right
+    if (testOperators(target, [resultA, ...remainingNumbers], allowConcatenation, memo)) {
         memo.set(key, true);
         return true;
     }
     // Test subtraction
-    if (testOperators(target, [left - right, ...remainingNumbers], memo)) {
+    const resultS = left - right;
+    if (testOperators(target, [resultS, ...remainingNumbers], allowConcatenation, memo)) {
         memo.set(key, true);
         return true;
     }
     // Test multiplication
-    if (testOperators(target, [left * right, ...remainingNumbers], memo)) {
+    const resultM = left * right;
+    if (testOperators(target, [resultM, ...remainingNumbers], allowConcatenation, memo)) {
         memo.set(key, true);
         return true;
     }
     // Test division (check for valid division)
-    if (right !== 0 && left % right === 0 && testOperators(target, [left / right, ...remainingNumbers], memo)) {
+    const resultD = left / right;
+    if (
+        right !== 0 && 
+        left % right === 0 && 
+        testOperators(target, [resultD, ...remainingNumbers], allowConcatenation, memo)
+    ) {
+        memo.set(key, true);
+        return true;
+    }
+    // Test concatenation
+    const resultC = parseInt(`${left}${right}`);
+    if (
+        allowConcatenation && 
+        testOperators(target, [resultC, ...remainingNumbers], allowConcatenation, memo)
+    ) {
         memo.set(key, true);
         return true;
     }
@@ -81,6 +105,6 @@ console.log("Part 1");
 const partOneResult = await part1();
 console.log(partOneResult);
 
-// console.log("Part 2");
-// const partTwoResult = await part2();
-// console.log(partTwoResult);
+console.log("Part 2");
+const partTwoResult = await part2();
+console.log(partTwoResult);
