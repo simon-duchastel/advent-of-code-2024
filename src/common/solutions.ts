@@ -14,7 +14,7 @@ import { part1 as day7part1 } from "@/solutions/day7";
 import { part2 as day7part2 } from "@/solutions/day7";
 
 export type SolutionFunction = (useSampleData: boolean) => Promise<number>
-export type SolutionFunctionsMap = { [key: string]: SolutionFunction }
+type SolutionFunctionsMap = { [key: string]: SolutionFunction }
 
 // lookup a solution function dynamically
 export function getSolutionFunction(day: number, part: number): SolutionFunction | undefined {
