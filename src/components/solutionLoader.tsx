@@ -1,5 +1,6 @@
 'use client';
 
+import { getSolutionFunction } from "@/common/solutions";
 import { useState } from "react";
 
 type SolutionLoaderProps = {
@@ -18,17 +19,14 @@ export default function SolutionLoader({
   const loadSolution = async () => {
     setData("Loading...");
     try {
-      const solutionPath = `@/solutions/day${day}`;
-      const solutionModule = await import(solutionPath);
-      const solutionFunction: (useSampleData: boolean) => Promise<number>
-        = solutionModule[`part${part}`];
+      const solutionFunction = getSolutionFunction(day, part);
 
-      if (typeof solutionFunction !== "function") {
-        throw new Error(`Solution not found for day ${day} part ${part}`);
+      if (solutionFunction !== undefined) {
+        const result = await solutionFunction(useSampleData ?? false);
+        setData(`${result}`);
+      } else {
+        setData(`Unable to get function day ${1} part ${1}`);
       }
-
-      const result = await solutionFunction(useSampleData ?? false);
-      setData(`${result}`);
     } catch (error: unknown) {
       let message: string
       if (error instanceof Error) {

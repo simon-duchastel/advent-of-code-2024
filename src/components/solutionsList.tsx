@@ -1,7 +1,8 @@
 import fs from 'fs';
-import path from "path";
 import { Fragment } from "react";
 import SolutionLoader from "./solutionLoader";
+import { SolutionFunctionsMap } from '@/common/solutions';
+import path from 'path';
 
 export default async function SolutionsList() {
   const numberOfDays = await getNumberOfDays();
@@ -21,8 +22,8 @@ export default async function SolutionsList() {
   );
 }
 
-// run during build-time to get the number of days to render
-async function getNumberOfDays() {
+// get the number of days based on the files in the `solutions` directory
+export function getNumberOfDays(): number {
   const solutionsDir = path.join(process.cwd(), 'src/solutions');
   const files = fs.readdirSync(solutionsDir);
   const dayFiles = files.filter(file => file.startsWith('day') && file.endsWith('.ts'));
