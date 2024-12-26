@@ -1,6 +1,6 @@
-import { readInputForDay } from './common/file.js';
+import { readInputForDay } from '@/common/file';
 
-async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(2, useSampleData);
     const lines = input.trim().split('\n');
 
@@ -16,7 +16,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     return safeReports;
 }
 
-async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(2, useSampleData);
     const lines = input.trim().split('\n');
 
@@ -66,10 +66,12 @@ function isReportSafe(report: number[]): [boolean, number] {
     return [true, -1];
 }
 
-console.log("Part 1");
-const partOneResult = await part1();
-console.log(partOneResult);
+if (import.meta.url === `file://${process.argv[1]}`) {
+    console.log("Part 1");
+    const partOneResult = await part1();
+    console.log(partOneResult);
 
-console.log("Part 2");
-const partTwoResult = await part2();
-console.log(partTwoResult);
+    console.log("Part 2");
+    const partTwoResult = await part2();
+    console.log(partTwoResult);
+}
