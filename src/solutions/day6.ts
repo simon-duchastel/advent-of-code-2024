@@ -1,6 +1,6 @@
-import { readInputForDay } from './common/file.js';
+import { readInputForDay } from '@/common/file';
 
-async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
     const { visitedPositions } = predictGuardRoute(map);
@@ -8,7 +8,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     return visitedPositions.uniquePositionsSize();
 }
 
-async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
     

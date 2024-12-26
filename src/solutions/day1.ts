@@ -1,6 +1,6 @@
-import { readInputForDay } from './common/file.js';
+import { readInputForDay } from '@/common/file';
 
-async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(1, useSampleData);
     var [leftList, rightList] = parseLists(input);
 
@@ -14,7 +14,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     return totalDistance;
 }
 
-async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(1, useSampleData);
     const [leftList, rightList] = parseLists(input);
     

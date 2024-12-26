@@ -1,6 +1,6 @@
-import { readInputForDay } from './common/file.js';
+import { readInputForDay } from '@/common/file';
 
-async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
     const wordSearch = parseWordSearch(input);
     const allXs = findAllChars(wordSearch, 'X');
@@ -13,7 +13,7 @@ async function part1(useSampleData: Boolean = false): Promise<number> {
     return numXmas;
 }
 
-async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: Boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
     const wordSearch = parseWordSearch(input);
     const allMs = findAllChars(wordSearch, 'M');
