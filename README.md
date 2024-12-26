@@ -2,11 +2,26 @@
 
 Solutions for the 2024 Advent of Code, written in [TypeScript](https://www.typescriptlang.org).
 
-The web-app is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The website is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+### Command Line Solutions
+
+To run the solutions, first compile the code:
+
+```bash
+npx tsc
+```
+
+Run the solutions with Node, replacing `day1.js` with your desired day:
+```bash
+node dist/solutions/day1.js
+```
+
+### Website
+
+To run the website, First, run the development server:
 
 ```bash
 npm run dev
