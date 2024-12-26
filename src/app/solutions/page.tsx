@@ -1,27 +1,11 @@
-
-import SolutionLoader from "@/components/solutionLoader";
 import Image from "next/image";
+import SolutionsList from "@/components/solutionsList";
 
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li>Day 1 Part 1: <SolutionLoader day={1} part={1}/></li>
-          <li>Day 1 Part 2: <SolutionLoader day={1} part={2}/></li>
-          <li>Day 2 Part 1: <SolutionLoader day={2} part={1}/></li>
-          <li>Day 2 Part 2: <SolutionLoader day={2} part={2}/></li>
-          <li>Day 3 Part 1: <SolutionLoader day={3} part={1}/></li>
-          <li>Day 3 Part 2: <SolutionLoader day={3} part={2}/></li>
-          <li>Day 4 Part 1: <SolutionLoader day={4} part={1}/></li>
-          <li>Day 4 Part 2: <SolutionLoader day={4} part={2}/></li>
-          <li>Day 5 Part 1: <SolutionLoader day={5} part={1}/></li>
-          <li>Day 5 Part 2: <SolutionLoader day={5} part={2}/></li>
-          <li>Day 6 Part 1: <SolutionLoader day={6} part={1}/></li>
-          <li>Day 6 Part 2: <SolutionLoader day={6} part={2}/></li>
-          <li>Day 7 Part 1: <SolutionLoader day={7} part={1}/></li>
-          <li>Day 7 Part 2: <SolutionLoader day={7} part={2}/></li>
-        </ol>
+        <SolutionsList />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
