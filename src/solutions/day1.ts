@@ -1,8 +1,8 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(1, useSampleData);
-    var [leftList, rightList] = parseLists(input);
+    let [leftList, rightList] = parseLists(input);
 
     // sort the lists and sum the difference between each item
     leftList = leftList.sort();
@@ -14,14 +14,14 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return totalDistance;
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(1, useSampleData);
     const [leftList, rightList] = parseLists(input);
     
-    var similarityScore = 0;
-    for (var left = 0; left < leftList.length; left++) {
-        var count = 0;
-        for (var right = 0; right < rightList.length; right++) {
+    let similarityScore = 0;
+    for (let left = 0; left < leftList.length; left++) {
+        let count = 0;
+        for (let right = 0; right < rightList.length; right++) {
             if (rightList[right] === leftList[left]) {
                 count += 1;
             }

@@ -1,8 +1,8 @@
 export async function readInputForDay(
     day: number, 
-    useSampleData: Boolean = false,
+    useSampleData: boolean = false,
 ): Promise<string> {
-    var filePath = `inputs/day${day}`;
+    let filePath = `inputs/day${day}`;
     if (useSampleData) {
         filePath += "-sample";
     }

@@ -1,6 +1,6 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
     const { visitedPositions } = predictGuardRoute(map);
@@ -8,13 +8,12 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return visitedPositions.uniquePositionsSize();
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(6, useSampleData);
     const map = parseMap(input);
     
     // check all positions where obstacles could be placed
-    let viableObstacles: Position[] = [];
-    var max = map.length * map[0].length;
+    const viableObstacles: Position[] = [];
     for (let row = 0; row < map.length; row++) {
         for (let col = 0; col < map[row].length; col++) {
             if (map[row][col] === '.') {
@@ -68,8 +67,8 @@ class UniquePositionsSet {
     // Return the size of unique positions (ignoring direction)
     uniquePositionsSize(): number {
         const uniquePositions = new Set();
-        for (let key of this.set) {
-            const [position, _] = key.split('-');
+        for (const key of this.set) {
+            const [position] = key.split('-');
             uniquePositions.add(position);
         }
         return uniquePositions.size;
@@ -101,7 +100,7 @@ function predictGuardRoute(
     
     while (true) {
         let [row, col] = guard;
-        let [dRow, dCol] = deltas[direction];
+        const [dRow, dCol] = deltas[direction];
         row += dRow;
         col += dCol;
 
@@ -112,7 +111,7 @@ function predictGuardRoute(
 
         // Check if the guard hits an obstacle
         if (map[row][col] === '#') {
-            let currentDirectionIndex = directions.indexOf(direction);
+            const currentDirectionIndex = directions.indexOf(direction);
             direction = directions[(currentDirectionIndex + 1) % 4];
             continue;
         }

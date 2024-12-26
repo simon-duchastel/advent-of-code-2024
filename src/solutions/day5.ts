@@ -1,12 +1,12 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(5, useSampleData);
     const instructions = parseInstructions(input);
     
     const sortedUpdates = sortUpdates(instructions);
 
-    var middleValueSum = 0;
+    let middleValueSum = 0;
     sortedUpdates.validUpdates
         .map((validUpdate) => getMiddleValue(validUpdate))
         .forEach((middleValue) => { middleValueSum += middleValue; });
@@ -14,12 +14,12 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return middleValueSum;
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(5, useSampleData);
     const instructions = parseInstructions(input);
 
     const sortedUpdates = sortUpdates(instructions);
-    var middleValueSum = 0;
+    let middleValueSum = 0;
     sortedUpdates.invalidUpdates
         .map((invalidUpdate) => fixUpdate(invalidUpdate, instructions))
         .map((validUpdate) => getMiddleValue(validUpdate))
@@ -47,10 +47,10 @@ type PageOrderingRules = Map<number, number[]>
 function parseInstructions(input: string): Instructions {
     const [ruleSection, updateSection] = input.split('\n\n');
 
-    var rules: Map<number, number[]> = new Map();
+    const rules: Map<number, number[]> = new Map();
     ruleSection.split('\n').forEach((rule) => {
         const [first, second] = rule.split('|').map((num) => parseInt(num));
-        var ruleToAdd = rules.get(first);
+        let ruleToAdd = rules.get(first);
         if (!ruleToAdd) {
             ruleToAdd = []
         }
@@ -68,8 +68,8 @@ function parseInstructions(input: string): Instructions {
 }
 
 function sortUpdates(instructions: Instructions): SortedUpdates {
-    var validUpdates = [];
-    var invalidUpdates = [];
+    const validUpdates = [];
+    const invalidUpdates = [];
     for (const update of instructions.pageUpdates) {
         const [isValid] = isUpdateValid(update, instructions.rules);
         if (isValid) {
@@ -89,8 +89,8 @@ function sortUpdates(instructions: Instructions): SortedUpdates {
 // true otherwise.
 // The offending rule is represented as the number that was printed before but should have been printed after.
 function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, number, number] {
-    var pagesSeen: number[] = [];
-    for (var i = 0; i < update.length; i++) {
+    const pagesSeen: number[] = [];
+    for (let i = 0; i < update.length; i++) {
         const page = update[i];
         const rulePages = rules.get(page);
         if (rulePages) {
@@ -106,8 +106,8 @@ function isUpdateValid(update: number[], rules: PageOrderingRules): [boolean, nu
 }
 
 function fixUpdate(update: number[], instructions: Instructions): number[] {
-    var [isNowValid, index, rule] = isUpdateValid(update, instructions.rules);
-    var newUpdate = update;
+    let [isNowValid, index, rule] = isUpdateValid(update, instructions.rules);
+    const newUpdate = update.slice();
     while (!isNowValid) {
         // swap the indices and try again
         const ruleIndex = update.indexOf(rule);

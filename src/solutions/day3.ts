@@ -1,10 +1,10 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(3, useSampleData);
     const mulInstructions = parseMulInstructions(input, false);
 
-    var sum = 0;
+    let sum = 0;
     for (const instruction of mulInstructions) {
         sum += instruction[0] * instruction[1];
     }
@@ -12,11 +12,11 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return sum;
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(3, useSampleData);
     const mulInstructions = parseMulInstructions(input, true);
 
-    var sum = 0;
+    let sum = 0;
     for (const instruction of mulInstructions) {
         sum += instruction[0] * instruction[1];
     }
@@ -28,13 +28,13 @@ type MulInstruction = [number, number];
 
 function parseMulInstructions(input: string, withConditionals: boolean): MulInstruction[] {
     const regex = /(mul\([0-9]+,[0-9]+\))|(do(n't)?\(\))/g;
-    var mulInstructions: MulInstruction[] = [];
+    const mulInstructions: MulInstruction[] = [];
     const matches = input.match(regex);
     if (!matches || matches.length === 0) { // if we have no matches return empty list
         return [];
     }
 
-    var mulIsDisabled = false;
+    let mulIsDisabled = false;
     for (const match of matches) {
         if (match === "don't()") {
             // mul instructions are now disabled
