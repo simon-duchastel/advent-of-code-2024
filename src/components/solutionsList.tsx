@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { Fragment } from "react";
 import SolutionLoader from "./solutionLoader";
-import { SolutionFunctionsMap } from '@/common/solutions';
 import path from 'path';
 
 export default async function SolutionsList() {
