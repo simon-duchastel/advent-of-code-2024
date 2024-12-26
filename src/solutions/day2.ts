@@ -1,13 +1,13 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(2, useSampleData);
     const lines = input.trim().split('\n');
 
-    var safeReports = 0;
+    let safeReports = 0;
     lines.map(line => {
         const report = line.split(/\s+/).map(Number);
-        const [isSafe, _] = isReportSafe(report)
+        const [isSafe] = isReportSafe(report)
         if (isSafe) {
             safeReports++;
         }
@@ -16,11 +16,11 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return safeReports;
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(2, useSampleData);
     const lines = input.trim().split('\n');
 
-    var safeReports = 0;
+    let safeReports = 0;
     lines.map(line => {
         const report = line.split(/\s+/).map(Number);
         const [isSafe, problemIndex] = isReportSafe(report);
@@ -29,9 +29,9 @@ export async function part2(useSampleData: Boolean = false): Promise<number> {
         } else {
             const lowerBound = Math.max(problemIndex - 2, 0);
             const upperBound = Math.min(problemIndex + 2, report.length);
-            for (var i = lowerBound; i < upperBound; i++) {
+            for (let i = lowerBound; i < upperBound; i++) {
                 const reportWithRemoval = report.filter((_, index) => index !== i);
-                const [isSafeWithRemoval, _] = isReportSafe(reportWithRemoval);
+                const [isSafeWithRemoval] = isReportSafe(reportWithRemoval);
                 if (isSafeWithRemoval) {
                     safeReports++;
                     break;
@@ -47,8 +47,8 @@ export async function part2(useSampleData: Boolean = false): Promise<number> {
 // true otherwise.
 function isReportSafe(report: number[]): [boolean, number] {
     // if the first is bigger than the second, the whole list should decrease
-    var shouldDecrease = report[0] > report[1];
-    for (var i = 1; i < report.length; i++) {
+    const shouldDecrease = report[0] > report[1];
+    for (let i = 1; i < report.length; i++) {
         if (shouldDecrease && report[i] >= report[i-1]) {
             return [false, i];
         }

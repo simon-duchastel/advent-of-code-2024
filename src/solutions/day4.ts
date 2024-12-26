@@ -1,11 +1,11 @@
 import { readInputForDay } from '@/common/file';
 
-export async function part1(useSampleData: Boolean = false): Promise<number> {
+export async function part1(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
     const wordSearch = parseWordSearch(input);
     const allXs = findAllChars(wordSearch, 'X');
 
-    var numXmas = 0;
+    let numXmas = 0;
     for (const x of allXs) {
         numXmas += numWordsAtPosition(wordSearch, x, 'XMAS').length;
     }
@@ -13,12 +13,12 @@ export async function part1(useSampleData: Boolean = false): Promise<number> {
     return numXmas;
 }
 
-export async function part2(useSampleData: Boolean = false): Promise<number> {
+export async function part2(useSampleData: boolean = false): Promise<number> {
     const input = await readInputForDay(4, useSampleData);
     const wordSearch = parseWordSearch(input);
     const allMs = findAllChars(wordSearch, 'M');
 
-    var masLocations: [Position, Direction][] = [];
+    const masLocations: [Position, Direction][] = [];
     for (const m of allMs) {
         // only look for words 'MAS' in the diaganol directions
         for (const masFound of numWordsAtPosition(wordSearch, m, 'MAS', false)) {
@@ -29,9 +29,9 @@ export async function part2(useSampleData: Boolean = false): Promise<number> {
     // find all the A's that are a part of 2 different MAS words - these are the 'X'
     // formation 'MAS's
     const allAs = findAllChars(wordSearch, 'A');
-    var numMas = 0;
+    let numMas = 0;
     for (const a of allAs) {
-        var numWordsMatched = 0;
+        let numWordsMatched = 0;
         for (const mas of masLocations) {
             const aLocation = applyDirection(mas[0], mas[1]);
             if (aLocation[0] === a[0] && aLocation[1] === a[1]) {
@@ -57,10 +57,10 @@ function parseWordSearch(input: string): WordSearch {
 }
 
 function findAllChars(wordSearch: WordSearch, char: string): Position[] {
-    var positions: Position[] = []
+    const positions: Position[] = []
     wordSearch.forEach((row, rowIndex) => {
-        row.forEach((char, colIndex) => {
-            if (char === char) {
+        row.forEach((rowChar, colIndex) => {
+            if (rowChar === char) {
                 positions.push([rowIndex, colIndex]);
             }
         });
@@ -79,8 +79,8 @@ function numWordsAtPosition(
     word: string,
     includeNonDiaganols: boolean = true
 ): Direction[] {
-    var directionsToReturn: Direction[] = [];
-    var directionsToCheck: Direction[] = [
+    const directionsToReturn: Direction[] = [];
+    const directionsToCheck: Direction[] = [
         [-1, -1], [-1, 1], [1, -1], [1, 1] // up-left, up-right, down-left, down-right
     ];
     if (includeNonDiaganols) {
@@ -89,7 +89,7 @@ function numWordsAtPosition(
         directionsToCheck.push([-1, 0], [1, 0], [0, -1], [0, 1]) // up, down, left, right
     }
 
-    for (let [dx, dy] of directionsToCheck) {
+    for (const [dx, dy] of directionsToCheck) {
         let valid = true;
         for (let i = 0; i < word.length; i++) {
             const newRow = position[0] + (i * dx);
