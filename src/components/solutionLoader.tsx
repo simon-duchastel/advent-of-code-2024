@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Props = {
+type SolutionLoaderProps = {
   day: number,
   part: number,
   useSampleData?: boolean,
@@ -12,7 +12,7 @@ export default function SolutionLoader({
   day,
   part,
   useSampleData,
-}: Props) {
+}: SolutionLoaderProps) {
   const [data, setData] = useState("Click to load!");
 
   const loadSolution = async () => {
