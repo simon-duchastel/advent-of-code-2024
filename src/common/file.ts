@@ -1,6 +1,7 @@
-import { readFile } from 'fs/promises';
-
-export async function readInputForDay(day: number, useSampleData: Boolean = false) {
+export async function readInputForDay(
+    day: number, 
+    useSampleData: Boolean = false,
+): Promise<string> {
     var filePath = `inputs/day${day}`;
     if (useSampleData) {
         filePath += "-sample";
@@ -8,7 +9,12 @@ export async function readInputForDay(day: number, useSampleData: Boolean = fals
     filePath += ".txt";
 
     try {
-        const data = await readFile(filePath, 'utf8');
+        const response = await fetch(filePath);
+        const data = await response.text();
+        if (!response.ok || data === "") {
+            throw Error("No input data found");
+        }
+
         return data;
     } catch (error) {
         console.error(`Error reading file ${filePath}:`, error);
