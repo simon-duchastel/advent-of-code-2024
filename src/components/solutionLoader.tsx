@@ -29,9 +29,16 @@ export default function SolutionLoader({
 
       const result = await solutionFunction(useSampleData ?? false);
       setData(`${result}`);
-    } catch (error: any) {
-      console.error("Error loading solution:", error);
-      setData(`Error: ${error.message}`);
+    } catch (error: unknown) {
+      let message: string
+      if (error instanceof Error) {
+        message = error.message
+      }
+      else {
+        message = String(error)
+      }
+
+      setData(message);
     }
   };
 
