@@ -12,6 +12,8 @@ import { part1 as day6part1 } from "@/solutions/day6";
 import { part2 as day6part2 } from "@/solutions/day6";
 import { part1 as day7part1 } from "@/solutions/day7";
 import { part2 as day7part2 } from "@/solutions/day7";
+import { part1 as day8part1 } from "@/solutions/day8";
+import { part2 as day8part2 } from "@/solutions/day8";
 
 export type SolutionFunction = (useSampleData: boolean) => Promise<number>
 type SolutionFunctionsMap = { [key: string]: SolutionFunction }
@@ -36,4 +38,6 @@ const solutionFunctions: SolutionFunctionsMap = {
     "6:2": day6part2,
     "7:1": day7part1,
     "7:2": day7part2,
+    "8:1": day8part1,
+    "8:2": day8part2,
 }
