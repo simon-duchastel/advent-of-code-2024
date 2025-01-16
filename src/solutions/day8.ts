@@ -14,7 +14,7 @@ export async function part1(useSampleData: boolean = false): Promise<number> {
                 const [x1, y1] = antennaCoord;
                 const [x2, y2] = otherCoord;
 
-                const dx = x1 + (x1 - x2);
+                const dx = (x1 - x2);
                 const dy = (y1 - y2);
 
                 antinodes.push([x1 + dx, y1 + dy]);
@@ -24,7 +24,7 @@ export async function part1(useSampleData: boolean = false): Promise<number> {
     });
 
     const inBoundsAntinodes = antinodes.filter(([x, y]) =>
-         x >= 0 && y >= 0 && x <= maxX && y <= maxY
+         x >= 0 && y >= 0 && x < maxX && y < maxY
     );
     const uniqueAntinodes = filterUniqueCoords(inBoundsAntinodes);
 
@@ -75,6 +75,23 @@ function filterUniqueCoords(coords: Coord[]): Coord[] {
         unique.add(key);
         return true;
     });
+}
+
+function printMap(size: [number, number], antinodes: Coord[]) {
+    const [maxX, maxY] = size;
+    const map: string[][] = Array.from({ length: maxX }, () =>
+        Array(maxY).fill('.')
+    );
+
+    for (const [x, y] of antinodes) {
+        if (x >= 0 && x < maxX && y >= 0 && y < maxY) {
+            map[x][y] = '#';
+        }
+    }
+
+    for (const row of map) {
+        console.log(row.join(''));
+    }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {    
