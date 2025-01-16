@@ -8,7 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "runDay": "bash -c 'npx tsx src/solutions/day$1.ts' --"
+        "day": "bash -c 'npx tsx src/solutions/day$1.ts' --"
     },
     "dependencies": {
         "next": "15.1.2",
