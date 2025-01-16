@@ -30,7 +30,7 @@
       ]
     },
     "allowJs": true,
-    "noEmit": true
+    "noEmit": false
   },
   "include": [
     "next-env.d.ts",
