@@ -25,7 +25,7 @@ export default function SolutionLoader({
         const result = await solutionFunction(useSampleData ?? false);
         setData(`${result}`);
       } else {
-        setData(`Unable to get function day ${1} part ${1}`);
+        setData(`Unable to get function day ${day} part ${part}`);
       }
     } catch (error: unknown) {
       let message: string

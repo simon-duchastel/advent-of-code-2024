@@ -1,29 +1,31 @@
 {
     "name": "advent-of-code-2024",
     "version": "0.1.0",
-    "type":"module",
+    "type": "module",
     "private": true,
     "scripts": {
-      "dev": "next dev --turbopack",
-      "build": "next build",
-      "start": "next start",
-      "lint": "next lint"
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "day": "bash -c 'npx tsx src/solutions/day$1.ts' --"
     },
     "dependencies": {
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0",
-      "next": "15.1.2"
+        "next": "15.1.2",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
     },
     "devDependencies": {
-      "typescript": "^5",
-      "@types/node": "^20",
-      "@types/react": "^19",
-      "@types/react-dom": "^19",
-      "postcss": "^8",
-      "tailwindcss": "^3.4.1",
-      "eslint": "^9",
-      "eslint-config-next": "15.1.2",
-      "@eslint/eslintrc": "^3"
+        "@eslint/eslintrc": "^3",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "15.1.2",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.3"
     }
-  }
-  
+}
