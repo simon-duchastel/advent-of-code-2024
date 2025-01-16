@@ -96,11 +96,9 @@ function parseAntennasFromInput(input: string): Antenna[] {
 }
 
 function parseMapSizeFromInput(input: string): [number, number] {
-    let x: number
-    let y: number
     const rows = input.split('\n');
-    x = rows.length;
-    y = rows[0].length;
+    const x = rows.length;
+    const y = rows[0].length;
 
     return [x, y]
 }
