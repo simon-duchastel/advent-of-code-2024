@@ -75,6 +75,8 @@ export async function part2(useSampleData: boolean = false): Promise<number> {
                     blockSize: spaces[rightIndex].blockSize,
                 });
                 spaceRemaining -= spaces[rightIndex].blockSize;
+            } else {
+                remainingSpaces.unshift(spaces[rightIndex]);
             }
             rightIndex--;
         }        
