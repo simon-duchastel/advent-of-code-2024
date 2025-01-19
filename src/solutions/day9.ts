@@ -15,29 +15,28 @@ export async function part1(useSampleData: boolean = false): Promise<number> {
             leftIndex++;
             continue;
         }
-        while (spaces[rightIndex].blockType !== "File") {
-            // search for the next file block from the right-hand side.
-            rightIndex--;
-        }
 
         // add the right-hand blocks to the left
         let spaceRemaining = spaces[leftIndex].blockSize;
-        while (spaceRemaining > 0) {
-            const spaceToAdd = Math.min(spaceRemaining, spaces[rightIndex].blockSize);
-            const space: Space = {
-                blockId: spaces[rightIndex].blockId,
-                blockType: "File",
-                blockSize: spaceToAdd,
-            }
-            rearrangedSpaces.push(space);
-
-            spaceRemaining -= spaceToAdd;
-            if (spaceToAdd === spaces[rightIndex].blockSize) {
-                rightIndex--;
+        while (spaceRemaining > 0 && rightIndex >= leftIndex) {
+            if (spaces[rightIndex].blockType === "File") {
+                const spaceToAdd = Math.min(spaceRemaining, spaces[rightIndex].blockSize);
+                rearrangedSpaces.push({
+                    blockId: spaces[rightIndex].blockId,
+                    blockType: "File",
+                    blockSize: spaceToAdd,
+                });
+                spaceRemaining -= spaceToAdd;
+        
+                if (spaceToAdd === spaces[rightIndex].blockSize) {
+                    rightIndex--; // Fully consumed this block
+                } else {
+                    spaces[rightIndex].blockSize -= spaceToAdd; // Partially consumed
+                }
             } else {
-                spaces[rightIndex].blockSize -= spaceToAdd;
+                rightIndex--; // Skip non-file blocks
             }
-        }
+        }        
         leftIndex++;
     }
 
@@ -111,7 +110,7 @@ function calculateChecksum(spaces: Space[]): number {
 
 if (import.meta.url === `file://${process.argv[1]}`) {    
     console.log("Part 1");
-    const partOneResult = await part1(false);
+    const partOneResult = await part1();
     console.log(partOneResult);
 
     console.log("Part 2");
